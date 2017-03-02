@@ -1,0 +1,189 @@
+ColumnBASE:
+Load 
+* ; 
+SQL 
+SELECT 
+       [CN_ColumnID] AS 'ColumnID'
+      ,[CN_TableID] AS 'TableID'
+      ,[CN_ColumnNM]
+      ,[CN_ExampleDataTXT]
+      ,[CN_DataTypeDSC]
+      ,[CN_SourceSystemNM]
+      ,[CN_SourceTableNM]
+      ,[CN_SourceColumnNM]
+      ,[CN_ColumnAliasNM]
+      ,[CN_PrimaryKeyFLG]
+      ,[CN_IncrementalFLG]
+      ,[CN_DescriptionTXT]
+      ,[CN_SourceSchemaNM]
+      ,[CN_OrdinalNBR]
+      ,[CN_StatusCD]
+      ,[CN_ExampleDataDTS]
+      ,[CN_SourceDataTypeTXT]
+      ,[CN_IsNullableFLG]
+      ,[CN_SourcePrimaryKeyFLG]
+      ,[CN_SourcePrimaryKeyOrdinalNBR]
+      ,[CN_IsSourceNullableFLG]
+      ,[CN_DataSensitivityCD]
+      ,[CN_ContentID]
+      ,[CN_ExcludeFromBaseViewFLG]
+      ,[CN_IsSystemColumnFLG]
+      ,[CN_AutoIncrementFLG]
+      ,[CN_DefaultValueTXT]
+  FROM [SAM].[Metadata].[ColumnBASE]
+  ;
+  
+ConnectionBASE:
+Load 
+* ; 
+SQL 
+  SELECT 
+      [C_ConnectionID] AS 'ConnectionID'
+      ,[C_DataMartID] 
+      ,[C_SystemNM]
+      ,[C_SystemVendorNM]
+      ,[C_SystemVersionTXT]
+      ,[C_DataSystemTypeCD]
+      ,[C_SSISEntryPointPackagePathTXT]
+      ,[C_DescriptionTXT]
+      ,[C_ContentID]
+      ,[C_DataSystemVersionTXT]
+  FROM [SAM].[Metadata].[ConnectionBASE]
+;
+
+DataMartBASE:
+Load 
+* ; 
+SQL 
+  SELECT [D_DataMartID] AS 'DataMartID'
+      ,[D_DataMartNM]
+      ,[D_DataMartPolicyID]
+      ,[D_SystemNM]
+      ,[D_DataMartTypeDSC] AS 'Data Mart Type'
+      ,[D_DataModelIMG]
+      ,[D_DataStewardEmailTXT] AS 'Data Steward Email'
+      ,[D_DataStewardFullNM] AS 'Data Steward Name'
+      ,[D_DescriptionTXT] AS 'SAM Description'
+      ,[D_ContentID]
+      ,[D_VersionTXT]
+      ,[D_IsHiddenFLG] AS 'SAM Hidden Status'
+      ,[D_SQLAgentProxyNM]
+      ,[D_SQLCredentialNM]
+  FROM [SAM].[Metadata].[DataMartBASE]
+  ;
+  
+ETLBatchHistoryBASE:
+Load 
+* ; 
+SQL 
+  SELECT [BA_BatchID] AS 'BatchID'
+      ,[BA_BatchDefinitionID]
+      ,[BA_BatchDefinitionNM] AS 'Batch Name'
+      ,[BA_BatchLoadTypeCD] AS 'Load Type'
+      ,[BA_SSISExecutionID]
+      ,[BA_DataMartID] AS 'DataMartID'
+      ,[BA_DataMartNM] AS 'Data Mart'
+      ,[BA_SourceConnectionID]
+      ,[BA_StatusID] AS 'StatusID'
+      ,BA_StartDTS AS 'Start Date/Time'
+      ,[BA_EndDTS]
+      ,CONVERT(varchar(6), BA_DurationSecondsCNT/3600) + 'h ' + RIGHT('0' + CONVERT(varchar(2), (BA_DurationSecondsCNT % 3600) / 60), 2) + 'm ' + RIGHT('0' + CONVERT(varchar(2), BA_DurationSecondsCNT % 60), 2) + 's' AS 'Duration'
+      ,[BA_OverrideLoadTypeCD]
+      ,[BA_OverrideDependencyFLG]
+      ,[BA_LoggingLevelCD]
+      ,[BA_RebuildIndexesCD]
+      ,[BA_BatchSourceTXT]
+      ,[BA_ShouldConfigureFLG]
+      ,[BA_IsWindowedFLG]
+      ,[BA_IsWithoutFileRetrievalFLG]
+  FROM [SAM].[Metadata].[ETLBatchHistoryBASE] BA
+  ;
+  
+ETLBindingHistoryBASE:
+Load 
+* ; 
+SQL 
+  SELECT [BI_BindingHistoryID]
+      ,[BI_BatchID] AS 'BatchID'
+      ,[BI_BindingID]
+      ,[BI_BindingNM]
+      ,[BI_BindingClassificationCD]
+      ,[BI_SSISExecutionID]
+      ,[BI_ProcessedRowCNT]
+      ,[BI_DestinationEntityID]
+      ,[BI_StatusID]
+      ,[BI_StatusReasonTXT]
+      ,[BI_BindingAttributeTXT] AS 'SAM Bindings'
+      ,[BI_StartDTS]
+      ,[BI_EndDTS]
+      ,[BI_DurationSecondsCNT]
+      ,[BI_LoadTierNBR]
+      ,[BI_SourceConnectionID]
+  FROM [SAM].[Metadata].[ETLBindingHistoryBASE]
+  ;
+  
+SAMBASE:
+Load 
+* ; 
+SQL 
+SELECT [S_DataMartID] AS 'DataMartID'
+      ,[S_DatabaseNM]
+      ,[S_DestinationObjectPrefixCD] AS 'SAM Name'
+      ,[S_SchemaNM]
+      ,[S_SuiteNM] AS 'SAM Suite Name'
+      ,[S_StatusCD] AS 'SAM Status'
+      ,[S_SAMTypeCD] AS 'SAM Type'
+  FROM [SAM].[Metadata].[SAMBASE]
+    WHERE S_StatusCD = 'Active'
+  ;
+  
+  TableBASE:
+Load 
+* ; 
+SQL 
+SELECT [T_TableID] 'TableID'
+      ,[T_DataMartID] AS 'DataMartID'
+      ,[T_DatabaseNM]
+      ,[T_SchemaNM]
+      ,[T_TableNM] AS 'Bindings'
+      ,[T_ViewNM]
+      ,[T_DataRangeFieldNM]
+      ,[T_DataRangeStartDTS]
+      ,[T_DataRangeEndDTS]
+      ,[T_RowCNT]
+      ,[T_LastSuccessfulLoadDTS]
+      ,[T_MaxIncrementalDTS]
+      ,[T_StartIncrementalOverlapMinutesNBR]
+      ,[T_SourceConnectionID] AS 'ConnectionID'
+      ,[T_SourceTableNM]
+      ,[T_TableTypeNM]
+      ,[T_DescriptionTXT]
+      ,[T_SourceQueryTXT]
+      ,[T_SourceSchemaNM]
+      ,[T_LoadTypeCD]
+      ,[T_FileGroupNBR]
+      ,[T_ValidationGroupingColumnNM]
+      ,[T_ValidationGroupingFormatTXT]
+      ,[T_ValidationFilterColumnNM]
+      ,[T_ValidationFilterRangeDaysNBR]
+      ,[T_ValidationEnabledFLG]
+      ,[T_PublicFLG]
+      ,[T_PersistedFLG]
+      ,[T_ContentID]
+      ,[T_LastModifiedDTS]
+      ,[T_LastDeployedDTS]
+      ,[T_RowCountMismatchThresholdNBR]
+      ,[T_DestinationConnectionID]
+      ,[T_AllowsDataEntryFLG]
+  FROM [SAM].[Metadata].[TableBASE]
+  ;
+
+ExecutionStatusBASE:
+Load
+*;
+SQL
+SELECT [StatusID]
+      ,[StatusCD] AS 'Status'
+  FROM [EDWAdmin].[CatalystAdmin].[ExecutionStatusBASE] AS E  
+  ;
+
